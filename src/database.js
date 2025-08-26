@@ -1,4 +1,3 @@
-
 const {MongoClient}=require("mongodb");
 
 const url="mongodb+srv://HasmiRoohy:VEzaW67ZZ7HvcHZH@cluster0.zlhxa.mongodb.net/";
@@ -31,4 +30,5 @@ async function run() {
     await client.close();
   }
 }
-run().catch(console.dir);
+const main=run().catch(console.dir);
+module.exports = main; // Export the main function as connectDB

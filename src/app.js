@@ -2,28 +2,35 @@ const express = require("express");
 const app = express();
 const connectDB = require("./config/data");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
-// ✅ MIDDLEWARE (ORDER MATTERS!)
-app.use(express.json()); // Must be FIRST for JSON parsing
-app.use(cookieParser()); // For cookie handling
+// ✅ Middleware (order matters!)
+app.use(express.json());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin:"http://localhost:5173",
+    credentials: true,
+  })
+);
 
-// ✅ ROUTERS
+// ✅ Routers
 const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
+const userRouter = require("./routes/user");
 
-// ✅ ROUTER MOUNTING
-app.use("/auth", authRouter); // /auth/signup
+app.use("/auth", authRouter);
 app.use("/profile", profileRouter);
 app.use("/request", requestRouter);
+app.use("/user", userRouter);
 
-
-// ✅ 404 HANDLER
+// ✅ 404 handler
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-// ✅ START SERVER
+// ✅ Start server
 connectDB()
   .then(() => {
     console.log("✅ Database connected successfully");
@@ -34,3 +41,5 @@ connectDB()
   .catch((error) => {
     console.error("❌ Database connection failed:", error.message);
   });
+
+module.exports = app;
